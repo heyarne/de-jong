@@ -1,6 +1,8 @@
-# de-jong
+# De-Jong Attractor
 
-A Quil sketch designed to ... well, that part is up to you.
+A quil sketch drawing a Peter de Jong attractor:
+
+![Example Attractor](./resources/Screen Shot 2017-10-04 at 21.30.26.png)
 
 ## Usage
 
