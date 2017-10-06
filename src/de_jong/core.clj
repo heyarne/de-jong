@@ -2,11 +2,13 @@
   (:require [quil.core :as q]
             [quil.middleware :as m]))
 
-(defn step
-  "Does the de-jong calculation of [x_n+1, y_n+1]"
-  [a b c d x y]
-  [(- (q/sin (* a y)) (q/cos (* b x)))
-   (- (q/sin (* c x)) (q/cos (* d y)))])
+(defn make-attractor
+  "Generates an de Jong attractor around the given parameters"
+  [a b c d]
+  (fn attractor
+    [x y]
+    [(- (q/sin (* a y)) (q/cos (* b x)))
+     (- (q/sin (* c x)) (q/cos (* d y)))]))
 
 (defn setup []
   (q/frame-rate 60)
@@ -17,13 +19,12 @@
         b -1.99168
         c 1.71743
         d -1.64958]
-    {:params [a b c d]
+    {:attractor (make-attractor a b c d)
      :coords [0 0]}))
 
-(defn update-state [state]
-  (let [[a b c d] (:params state)
-        [x y] (:coords state)]
-    (assoc state :coords (step a b c d x y))))
+(defn update-state [{:keys [coords attractor] :as state}]
+  (let [[x y] coords]
+    (assoc state :coords (attractor x y))))
 
 (defn draw-state [{:keys [coords]}]
   (let [x (q/map-range (first coords) -2 2 (* (q/width) 0.08) (* (q/width) 0.92))
